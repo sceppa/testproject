@@ -13,8 +13,6 @@ class Rusty_Inc_Org_Chart_Tree {
 	public function __construct( $list_of_teams ) {
 		$this->list_of_teams = $list_of_teams;
 		$this->build_map_of_teams();
-		// $new_nested_tree = $this->get_nested_tree_new();
-		// print_r( $new_nested_tree );
 	}
 
 	/**
@@ -26,22 +24,6 @@ class Rusty_Inc_Org_Chart_Tree {
 	 *
 	 * @return array|null the root of the tree or `null` if the tree is empty
 	 */
-	public function get_nested_tree_old( $root = null ) {
-		if ( is_null( $root ) ) {
-			$root = $this->get_root( $this->list_of_teams );
-			if ( is_null( $root ) ) {
-				return null;
-			}
-		}
-		$root['children'] = array_map(
-			function( $child ) {
-				return $this->get_nested_tree( $child );
-			},
-			$this->get_children( $root )
-		);
-		return $root;
-	}
-
 	public function get_nested_tree( $root = null ) {
 		try {
 			if ( is_null( $root ) ) {
@@ -82,29 +64,8 @@ class Rusty_Inc_Org_Chart_Tree {
 	}
 
 	public function get_nested_tree_js( $root = null ) {
-		// $root = $this->get_nested_tree( $root );
-		// if ( is_null( $root ) ) {
-		// 	return 'null';
-		// }
-		// $js = '{';
-		// foreach ( $root as $key => $value ) {
-		// 	$js .= '"' . $key . '":';
-		// 	if ( 'children' === $key ) {
-		// 		$js .= '[' . implode( ', ', array_map( [ $this, 'get_nested_tree_js' ], $value ) ) . ']';
-		// 	} elseif ( is_numeric( $value ) ) {
-		// 		$js .= $value . ',';
-		// 	} elseif ( 'emoji' === $key ) {
-		// 		$js .= $this->emoji_to_js( $value );
-		// 	} elseif ( null === $value ) {
-		// 		$js .= 'null,';
-		// 	} else {
-		// 		$js .= '"' . $value . '",';
-		// 	}
-		// }
-		// $js .= '}';
-		// return $js;
 		try {
-			return json_encode( $this->get_nested_tree( $root ) );
+		  	return json_encode( $this->get_nested_tree( $root ) );
 		} catch ( Exception $ex ) {
 			throw $ex;
 		}
@@ -122,17 +83,6 @@ class Rusty_Inc_Org_Chart_Tree {
 			throw $ex;
 		}
 	}
-
-	// private function get_children( $parent ) {
-	// 	return array_values(
-	// 		array_filter(
-	// 			$this->list_of_teams,
-	// 			function( $team ) use ( $parent ) {
-	// 				return $team['parent_id'] === $parent['id'];
-	// 			}
-	// 		)
-	// 	);
-	// }
 
 	private function emoji_to_js( $emoji ) {
 		return '"' . implode(
