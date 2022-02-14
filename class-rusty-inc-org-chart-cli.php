@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/class-rusty-inc-org-chart-plugin.php';
+
+if ( file_exists( __DIR__ . '/class-rusty-inc-org-chart-plugin.php' ) ) {
+	require_once __DIR__ . '/class-rusty-inc-org-chart-plugin.php';
+}
 
 class Rusty_Inc_Org_Chart_CLI {
 	/**
