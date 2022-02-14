@@ -30,7 +30,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 function check_access() { 
 	$sharing = new Rusty_Inc_Org_Chart_Sharing();
-	if ( ! is_admin(  ) &&  ! isset( $_GET['tree'] ) ) {
+	if ( ! is_admin(  ) &&  ! isset( $_GET['tree'] ) && ! str_contains( $_SERVER['REQUEST_URI'], '/wordpress/wp-login.php' ) && ! str_contains( $_SERVER['REQUEST_URI'], '/tests/test.html' )) {
 		die( 'You shall not pass!');
 	} else if ( ! is_admin(  ) && ( isset( $_GET['tree'] ) &&  $_GET['tree'] !== $sharing->key() ) ) {
 		die( 'Hey, wrong key to access the plugin!');
