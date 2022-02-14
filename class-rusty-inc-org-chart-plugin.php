@@ -1,7 +1,11 @@
 <?php
 
-require_once __DIR__ . '/class-rusty-inc-org-chart-tree.php';
-require_once __DIR__ . '/class-rusty-inc-org-chart-sharing.php';
+if ( file_exists( __DIR__ . '/class-rusty-inc-org-chart-tree.php' ) ) {
+	require_once __DIR__ . '/class-rusty-inc-org-chart-tree.php';
+}
+if ( file_exists( __DIR__ . '/class-rusty-inc-org-chart-sharing.php' ) ) {
+	require_once __DIR__ . '/class-rusty-inc-org-chart-sharing.php';
+}
 
 /**
  * Responsible for the WordPress plumbing -- getting the page running, output of JS
