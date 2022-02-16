@@ -188,4 +188,25 @@ class Rusty_Inc_Org_Chart_Plugin {
 			throw $ex;
 		}
 	}
+	
+	private function build_array_inplace( array $input, $output = [] ) {
+		// Add some try/catch
+		if ( is_null( $input ) || count( $input ) === 0 ) {
+			return $input;
+		}		
+		if ( array_key_exists( 'children', $input ) ) {
+			if ( empty( $input['children'] ) )  {
+				unset( $input['children'] );
+				$output[] = $input;
+				return $output;
+			} else {
+				foreach ($input['children'] as $child ) {
+					$output = build_array( $child, $output );
+				}
+				unset( $input['children'] );
+				$output[] = $input;
+				return $output;
+			}
+		}
+	}
 }
