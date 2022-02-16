@@ -107,11 +107,11 @@ class Rusty_Inc_Org_Chart_Plugin {
 			if ( isset( $_POST['tree']) && $_POST['tree'] !== null  && !empty( $_POST['tree'] )) {
 				$tree_array = json_decode( stripslashes( $_POST['tree'] ), true );
 				if ( is_array( $tree_array ) ) {
-					$this->build_array( $tree_array );
-					update_option( self::OPTION_NAME, $this->tmp_array );
+					// $this->build_array( $tree_array );
+					update_option( self::OPTION_NAME, $this->build_array_inplace( $tree_array ) );
 					$this->response_message = 'Tree stored succesfully';
 				} else {
-					$this->response_message = "Error: wrong tree format submitted."; 		
+					$this->response_message = "Error: wrong tree format submitted.";
 				}
 			} 
 		} catch ( Exception $ex ) {
@@ -165,48 +165,28 @@ class Rusty_Inc_Org_Chart_Plugin {
 	public function org_chart_controller() {
 		require __DIR__ . '/admin-page-template.php';
 	}
-
-	private $tmp_array = array();
-	private function build_array( array $input ) {
+	
+	private function build_array_inplace( array $input, $output = [] ) {
 		try {
 			if ( is_null( $input ) || count( $input ) === 0 ) {
-				return;
+				return $input;
 			}		
 			if ( array_key_exists( 'children', $input ) ) {
-				if ( empty( $input['children'] ) ) {
-					unset($input['children']);
-					array_push( $this->tmp_array, $input );
+				if ( empty( $input['children'] ) )  {
+					unset( $input['children'] );
+					$output[] = $input;
+					return $output;
 				} else {
 					foreach ($input['children'] as $child ) {
-						$this->build_array( $child );
+						$output = $this->build_array_inplace( $child, $output );
 					}
 					unset( $input['children'] );
-					array_push( $this->tmp_array, $input );
+					$output[] = $input;
+					return $output;
 				}
 			}
 		} catch ( Exception $ex ) {
 			throw $ex;
-		}
-	}
-	
-	private function build_array_inplace( array $input, $output = [] ) {
-		// Add some try/catch
-		if ( is_null( $input ) || count( $input ) === 0 ) {
-			return $input;
-		}		
-		if ( array_key_exists( 'children', $input ) ) {
-			if ( empty( $input['children'] ) )  {
-				unset( $input['children'] );
-				$output[] = $input;
-				return $output;
-			} else {
-				foreach ($input['children'] as $child ) {
-					$output = build_array( $child, $output );
-				}
-				unset( $input['children'] );
-				$output[] = $input;
-				return $output;
-			}
 		}
 	}
 }
